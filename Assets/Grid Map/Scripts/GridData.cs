@@ -8,7 +8,7 @@ using CodeMonkey.Utils;
 /// Contains the data for a grid object.
 /// </summary>
 /// Notes:
-/// - Using Utils from https://unitycodemonkey.com/utils.php
+/// - Using Utilies from https://unitycodemonkey.com/utils.php
 /// - Based on Tutorial: https://youtu.be/waEsGu--9P8
 public class GridData<TGridObject>
 {
@@ -54,7 +54,7 @@ public class GridData<TGridObject>
                 for (int y = 0; y < m_gridArray.GetLength(1); y++)
                 {
                     m_debugTextArray[x, y] = UtilsClass.CreateWorldText(m_gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f,
-                        16, Color.white, TextAnchor.MiddleCenter);
+                        20, Color.white, TextAnchor.MiddleCenter);
 
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
@@ -125,7 +125,7 @@ public class GridData<TGridObject>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <param name="value"></param>
-    public void SetValue(int x, int y, TGridObject value)
+    public void SetGridObject(int x, int y, TGridObject value)
     {
         if (x >= 0 && y >= 0 && x < m_width && y < m_height) // make sure its a valid grid position
         {
@@ -143,12 +143,12 @@ public class GridData<TGridObject>
     /// </summary>
     /// <param name="worldPosition"></param>
     /// <param name="value"></param>
-    public void SetValue(Vector3 worldPosition, TGridObject value)
+    public void SetGridObject(Vector3 worldPosition, TGridObject value)
     {
         int x;
         int y;
         GetXY(worldPosition, out x, out y);
-        SetValue(x, y, value);
+        SetGridObject(x, y, value);
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public class GridData<TGridObject>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    public TGridObject GetValue(int x, int y)
+    public TGridObject GetGridObject(int x, int y)
     {
         if (x >= 0 && y >= 0 && x < m_width && y < m_height)
         {
@@ -176,12 +176,12 @@ public class GridData<TGridObject>
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    public TGridObject GetValue(Vector3 worldPosition)
+    public TGridObject GetGridObject(Vector3 worldPosition)
     {
         int x;
         int y;
         GetXY(worldPosition, out x, out y);
-        return GetValue(x, y);
+        return GetGridObject(x, y);
     }
 
     #endregion

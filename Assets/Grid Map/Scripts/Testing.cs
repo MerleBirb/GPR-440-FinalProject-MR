@@ -5,11 +5,11 @@ using CodeMonkey.Utils;
 
 public class Testing : MonoBehaviour
 {
-    private GridData<bool> m_grid;
+    private Pathfinding m_pathfinding;
 
     private void Start()
     {
-        //m_grid = new GridData<bool>(10, 10, 1f, new Vector3(0, 0));
+        m_pathfinding = new Pathfinding(10, 10);
     }
 
     private void Update()
@@ -22,14 +22,28 @@ public class Testing : MonoBehaviour
     /// </summary>
     private void CheckInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) // pathfind to cell clicked
         {
-            m_grid.SetValue(UtilsClass.GetMouseWorldPosition(), true);
+            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+            m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int x, out int y);
+            List<PathNode> path = m_pathfinding.FindPath(0, 0, x, y);
+
+            if (path != null)
+            {
+                for (int i = 0; i < path.Count - 1; i++)
+                {
+                    Debug.DrawLine(new Vector3(path[i].x, path[i].y) * 10f + Vector3.one * 5f, 
+                        new Vector3(path[i + 1].x, path[i + 1].y) * 10f + Vector3.one * 5f, 
+                        Color.green, 100f);
+                }
+            }
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            Debug.Log(m_grid.GetValue(UtilsClass.GetMouseWorldPosition()));
+            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+            m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int x, out int y);
+            m_pathfinding.GetNode(x, y).SetIsWalkable(!m_pathfinding.GetNode(x, y).IsWalkable);
         }
     }
 }
