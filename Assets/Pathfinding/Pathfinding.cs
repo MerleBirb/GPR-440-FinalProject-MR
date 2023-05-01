@@ -18,9 +18,9 @@ public class Pathfinding
     private List<PathNode> m_openList;
     private HashSet<PathNode> m_closedList;
 
-    public Pathfinding(int width, int height)
+    public Pathfinding(int width, int height, Vector3 startPos)
     {
-        m_grid = new GridData<PathNode>(width, height, 10, Vector3.zero, (GridData<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        m_grid = new GridData<PathNode>(width, height, 1, startPos, (GridData<PathNode> g, int x, int y) => new PathNode(g, x, y));
     }
 
     /// <summary>
