@@ -7,25 +7,26 @@ using CodeMonkey.Utils;
 public class Testing : MonoBehaviour
 {
     private Pathfinding m_pathfinding;
-    [SerializeField] private Transform m_sprite;
-    [SerializeField] private LayerMask m_unwalkableMask;
-    [SerializeField] private Tilemap m_tilemap;
-    [SerializeField] private FieldOfView m_fov;
+    [SerializeField] private Transform character;
+    [SerializeField] private LayerMask unwalkableMask;
+    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private FieldOfView fieldOfView;
+    [SerializeField] private Vector2Int gridSize;
 
-    List<PathNode> m_path;
-    int m_targetIndex = 0;
+    private List<PathNode> m_path;
+    private int m_targetIndex = 0;
 
     private void Start()
     {
-        m_pathfinding = new Pathfinding(20, 20, transform.position - (Vector3.one * 10));
+        m_pathfinding = new Pathfinding(gridSize.x, gridSize.y, transform.position);
 
         // set all unwalkable locations
-        foreach (var pos in m_tilemap.cellBounds.allPositionsWithin)
+        foreach (var pos in tilemap.cellBounds.allPositionsWithin)
         {
             Vector3Int localPlace = new Vector3Int(pos.x, pos.y);
-            Vector3 place = m_tilemap.CellToWorld(localPlace);
+            Vector3 place = tilemap.CellToWorld(localPlace);
 
-            if (m_tilemap.HasTile(localPlace))
+            if (tilemap.HasTile(localPlace))
             {
                 m_pathfinding.GetGrid().GetXY(place, out int x, out int y);
                 m_pathfinding.GetNode(x, y).SetIsWalkable(!m_pathfinding.GetNode(x, y).IsWalkable);
@@ -37,7 +38,7 @@ public class Testing : MonoBehaviour
     {
         CheckInput();
 
-        m_fov.SetOrigin(m_sprite.position);
+        fieldOfView.SetOrigin(character.position);
     }
 
     /// <summary>
@@ -50,7 +51,7 @@ public class Testing : MonoBehaviour
             m_path = null;
 
             Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
-            m_pathfinding.GetGrid().GetXY(m_sprite.position, out int startX, out int startY);
+            m_pathfinding.GetGrid().GetXY(character.position, out int startX, out int startY);
             m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int endX, out int endY);
 
             m_path = m_pathfinding.FindPath(startX, startY, endX, endY);
@@ -85,7 +86,7 @@ public class Testing : MonoBehaviour
 
         while (true)
         {
-            if (m_sprite.position == currentWaypoint)
+            if (character.position == currentWaypoint)
             {
                 m_targetIndex++;
                 if (m_targetIndex >= m_path.Count)
@@ -97,7 +98,7 @@ public class Testing : MonoBehaviour
                 currentWaypoint.z = 0;
             }
 
-            m_sprite.position = Vector3.MoveTowards(m_sprite.position, currentWaypoint, 3 * Time.deltaTime);
+            character.position = Vector3.MoveTowards(character.position, currentWaypoint, 3 * Time.deltaTime);
             yield return null;
         }
     }
