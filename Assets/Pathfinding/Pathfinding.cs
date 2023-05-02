@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 /// <summary>
 /// Contains logic for finding the best path. Uses A* pathfinding.
@@ -13,6 +14,9 @@ public class Pathfinding
 {
     private const int MOVE_STRAIGHT_COST = 10;
     private const int MOVE_DIAGONAL_COST = 14;
+
+    private LayerMask m_unwalkableMask;
+    private Tilemap m_tilemap;
 
     private GridData<PathNode> m_grid;
     private List<PathNode> m_openList;

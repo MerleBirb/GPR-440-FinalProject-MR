@@ -46,15 +46,15 @@ public class GridData<TGridObject>
         bool showDebug = true;
         if (showDebug)
         {
-            m_debugTextArray = new TextMesh[width, height];
+            //m_debugTextArray = new TextMesh[width, height];
 
             // cycle through multidimensional array
             for (int x = 0; x < m_gridArray.GetLength(0); x++)
             {
                 for (int y = 0; y < m_gridArray.GetLength(1); y++)
                 {
-                    m_debugTextArray[x, y] = UtilsClass.CreateWorldText(m_gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f,
-                        6, Color.white, TextAnchor.MiddleCenter);
+                    //m_debugTextArray[x, y] = UtilsClass.CreateWorldText(m_gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f,
+                    //    6, Color.white, TextAnchor.MiddleCenter);
 
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.red, 100f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.red, 100f);
@@ -64,10 +64,10 @@ public class GridData<TGridObject>
             Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.red, 100f);
             Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.red, 100f);
 
-            OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) =>
-            {
-                m_debugTextArray[eventArgs.x, eventArgs.y].text = m_gridArray[eventArgs.x, eventArgs.y]?.ToString();
-            };
+            //OnGridObjectChanged += (object sender, OnGridObjectChangedEventArgs eventArgs) =>
+            //{
+            //    m_debugTextArray[eventArgs.x, eventArgs.y].text = m_gridArray[eventArgs.x, eventArgs.y]?.ToString();
+            //};
         }
     }
 
@@ -134,7 +134,7 @@ public class GridData<TGridObject>
         }
         else
         {
-            Debug.LogError("Setting value to an invalid grid position.");
+            Debug.LogWarning("Setting value to an invalid grid position, skipping.");
         }
     }
 
@@ -165,7 +165,7 @@ public class GridData<TGridObject>
         }
         else
         {
-            Debug.LogError("Returning an invalid value.");
+            Debug.LogWarning("Returning an invalid value, skipping.");
             return default(TGridObject);
         }
     }

@@ -11,8 +11,8 @@ TagManager:
   - Solid Objects
   - Water
   - UI
-  - 
-  - 
+  - Mask
+  - Shadow
   - 
   - 
   - 
@@ -49,4 +49,10 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 4147443053
+    locked: 0
+  - name: Enemy
+    uniqueID: 722035001
+    locked: 0
+  - name: Shadow
+    uniqueID: 2861861365
     locked: 0
