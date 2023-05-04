@@ -2151,9 +2151,10 @@ GameObject:
   m_Component:
   - component: {fileID: 504200615}
   - component: {fileID: 504200616}
-  m_Layer: 0
+  - component: {fileID: 504200617}
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2191,6 +2192,51 @@ MonoBehaviour:
     m_Bits: 8
   baseMoveSpeed: 3
   radius: 0.25
+--- !u!61 &504200617
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504200614}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2568,12 +2614,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 552527473}
-  unwalkableMask:
+  obstacleMask:
     serializedVersion: 2
     m_Bits: 8
   tilemap: {fileID: 457268696}
   fieldOfView: {fileID: 1529891087}
   gridSize: {x: 26, y: 16}
+  moveSpeed: 3
 --- !u!1 &1375767455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2735,9 +2782,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c15a727899ccc10459a045caf3fda919, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockMask:
+  obstacleMask:
     serializedVersion: 2
     m_Bits: 8
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &1672177876
 GameObject:
   m_ObjectHideFlags: 0

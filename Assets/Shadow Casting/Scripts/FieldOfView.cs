@@ -1,9 +1,6 @@
 // Author: Merle Roji
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using CodeMonkey.Utils;
 
 /// <summary>
 /// Field of view projects a light that cuts through darkness in the field of view. 
@@ -13,12 +10,18 @@ using CodeMonkey.Utils;
 /// - Based on Tutorial: https://youtu.be/CSeUMTaNFYk
 public class FieldOfView : MonoBehaviour
 {
-    [SerializeField] private LayerMask blockMask;
+    [SerializeField] private LayerMask obstacleMask;
+    [SerializeField] private LayerMask targetMask;
 
     private Mesh m_mesh;
     private Vector3 m_origin;
     private float m_fov;
     private float m_startingAngle;
+    private Transform m_target;
+    public Transform Target
+    {
+        get => m_target;
+    }
 
     private void Start()
     {
@@ -63,15 +66,20 @@ public class FieldOfView : MonoBehaviour
         for (int i = 0; i <= rayCount; i++)
         {
             Vector3 vertex;
-            RaycastHit2D hit = Physics2D.Raycast(m_origin, UtilsClass.GetVectorFromAngle(angle), viewDistance, blockMask);
+            RaycastHit2D hitObstacle = Physics2D.Raycast(m_origin, GetVectorFromAngle(angle), viewDistance, obstacleMask);
 
-            if (hit.collider == null) // no hit
+            if (hitObstacle.collider == null) // no hit
             {
-                vertex = m_origin + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
+                vertex = m_origin + GetVectorFromAngle(angle) * viewDistance;
+                m_target = null; // if there is no target to detect
             }
             else // hit object
             {
-                vertex = hit.point;
+                vertex = hitObstacle.point;
+                if (hitObstacle.transform.tag == "Player") // check if the obstacle is a player
+                {
+                    m_target = hitObstacle.transform; // set target to player
+                }
             }
 
             vertices[vertIndex] = vertex;
@@ -109,6 +117,31 @@ public class FieldOfView : MonoBehaviour
     /// <param name="dir"></param>
     public void SetAimDirection(Vector3 dir)
     {
-        m_startingAngle = UtilsClass.GetAngleFromVectorFloat(dir) - m_fov / 2f;
+        m_startingAngle = GetAngleFromVectorFloat(dir) - m_fov / 2f;
+    }
+
+    /// <summary>
+    /// Returns a vector from a given angle.
+    /// </summary>
+    /// <param name="angle"></param>
+    /// <returns></returns>
+    private Vector3 GetVectorFromAngle(float angle)
+    {
+        float angleRadians = angle * (Mathf.PI / 180f);
+        return new Vector3(Mathf.Cos(angleRadians), Mathf.Sin(angleRadians));
+    }
+
+    /// <summary>
+    /// Returns an angle from a given angle.
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    private float GetAngleFromVectorFloat(Vector3 dir)
+    {
+        dir = dir.normalized;
+        float n = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        if (n < 0) n += 360;
+
+        return n;
     }
 }

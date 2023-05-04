@@ -2,23 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using CodeMonkey.Utils;
 
+/// <summary>
+/// Tests the lighting and controls.
+/// </summary>
+/// Notes:
+/// - Using Utilies from https://unitycodemonkey.com/utils.php
+/// - Based on Tutorial: https://youtu.be/waEsGu--9P8
 public class Testing : MonoBehaviour
 {
     private Pathfinding m_pathfinding;
     [SerializeField] private Transform character;
-    [SerializeField] private LayerMask unwalkableMask;
+    [SerializeField] private LayerMask obstacleMask;
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private FieldOfView fieldOfView;
     [SerializeField] private Vector2Int gridSize;
+    [SerializeField, Min(0.0f)] private float moveSpeed;
 
     private List<PathNode> m_path;
     private int m_targetIndex = 0;
 
+    private Vector3 m_currentWaypoint;
+    private Camera m_mainCam;
+
     private void Start()
     {
         m_pathfinding = new Pathfinding(gridSize.x, gridSize.y, transform.position);
+        m_currentWaypoint = character.position;
+        m_mainCam = Camera.main;
 
         // set all unwalkable locations
         foreach (var pos in tilemap.cellBounds.allPositionsWithin)
@@ -50,7 +61,8 @@ public class Testing : MonoBehaviour
         {
             m_path = null;
 
-            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+            Vector3 mouseWorldPosition = m_mainCam.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPosition.z = 0;
             m_pathfinding.GetGrid().GetXY(character.position, out int startX, out int startY);
             m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int endX, out int endY);
 
@@ -73,20 +85,23 @@ public class Testing : MonoBehaviour
 
         if (Input.GetMouseButtonDown(1))
         {
-            Vector3 mouseWorldPosition = UtilsClass.GetMouseWorldPosition();
+            Vector3 mouseWorldPosition = m_mainCam.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorldPosition.z = 0;
             m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int x, out int y);
             Debug.Log((m_pathfinding.GetGrid().GetWorldPosition(x, y).x) + ", " + (m_pathfinding.GetGrid().GetWorldPosition(x, y).y));
         }
+
+        if (m_currentWaypoint != character.position) character.position = Vector3.MoveTowards(character.position, m_currentWaypoint, moveSpeed * Time.deltaTime);
     }
 
     IEnumerator FollowPath()
     {
-        Vector3 currentWaypoint = m_pathfinding.GetGrid().GetWorldPosition(m_path[0].x, m_path[0].y) + Vector3.one * 0.5f;
-        currentWaypoint.z = 0;
+        m_currentWaypoint = m_pathfinding.GetGrid().GetWorldPosition(m_path[m_targetIndex].x, m_path[m_targetIndex].y) + Vector3.one * 0.5f;
+        m_currentWaypoint.z = 0;
 
         while (true)
         {
-            if (character.position == currentWaypoint)
+            if (character.position == m_currentWaypoint)
             {
                 m_targetIndex++;
                 if (m_targetIndex >= m_path.Count)
@@ -94,11 +109,10 @@ public class Testing : MonoBehaviour
                     yield break;
                 }
 
-                currentWaypoint = m_pathfinding.GetGrid().GetWorldPosition(m_path[m_targetIndex].x, m_path[m_targetIndex].y) + Vector3.one * 0.5f;
-                currentWaypoint.z = 0;
+                m_currentWaypoint = m_pathfinding.GetGrid().GetWorldPosition(m_path[m_targetIndex].x, m_path[m_targetIndex].y) + Vector3.one * 0.5f;
+                m_currentWaypoint.z = 0;
             }
 
-            character.position = Vector3.MoveTowards(character.position, currentWaypoint, 3 * Time.deltaTime);
             yield return null;
         }
     }

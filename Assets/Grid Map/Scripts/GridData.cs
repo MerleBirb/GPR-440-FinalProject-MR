@@ -2,7 +2,6 @@
 
 using System;
 using UnityEngine;
-using CodeMonkey.Utils;
 
 /// <summary>
 /// Contains the data for a grid object.
@@ -24,7 +23,6 @@ public class GridData<TGridObject>
     private float m_cellSize;
     private TGridObject[,] m_gridArray;
     private Vector3 m_originPosition;
-    private TextMesh[,] m_debugTextArray; 
 
     public GridData(int width, int height, float cellSize, Vector3 originPosition, Func<GridData<TGridObject>, int, int, TGridObject> createGridObject)
     {
@@ -53,9 +51,6 @@ public class GridData<TGridObject>
             {
                 for (int y = 0; y < m_gridArray.GetLength(1); y++)
                 {
-                    //m_debugTextArray[x, y] = UtilsClass.CreateWorldText(m_gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * 0.5f,
-                    //    6, Color.white, TextAnchor.MiddleCenter);
-
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.red, 100f);
                     Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.red, 100f);
                 }
