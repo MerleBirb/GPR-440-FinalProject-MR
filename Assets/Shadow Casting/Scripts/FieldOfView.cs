@@ -6,7 +6,6 @@ using UnityEngine;
 /// Field of view projects a light that cuts through darkness in the field of view. 
 /// </summary>
 /// Notes:
-/// - Using Utilies from https://unitycodemonkey.com/utils.php
 /// - Based on Tutorial: https://youtu.be/CSeUMTaNFYk
 public class FieldOfView : MonoBehaviour
 {

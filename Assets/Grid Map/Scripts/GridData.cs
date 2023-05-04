@@ -7,7 +7,6 @@ using UnityEngine;
 /// Contains the data for a grid object.
 /// </summary>
 /// Notes:
-/// - Using Utilies from https://unitycodemonkey.com/utils.php
 /// - Based on Tutorial: https://youtu.be/waEsGu--9P8
 public class GridData<TGridObject>
 {

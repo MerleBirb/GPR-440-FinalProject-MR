@@ -7,7 +7,6 @@ using UnityEngine.Tilemaps;
 /// Tests the lighting and controls.
 /// </summary>
 /// Notes:
-/// - Using Utilies from https://unitycodemonkey.com/utils.php
 /// - Based on Tutorial: https://youtu.be/waEsGu--9P8
 public class Testing : MonoBehaviour
 {
@@ -52,6 +51,11 @@ public class Testing : MonoBehaviour
         fieldOfView.SetOrigin(character.position);
     }
 
+    private void FixedUpdate()
+    {
+        Movement();
+    }
+
     /// <summary>
     /// Checks input from the player.
     /// </summary>
@@ -89,8 +93,14 @@ public class Testing : MonoBehaviour
             mouseWorldPosition.z = 0;
             m_pathfinding.GetGrid().GetXY(mouseWorldPosition, out int x, out int y);
             Debug.Log((m_pathfinding.GetGrid().GetWorldPosition(x, y).x) + ", " + (m_pathfinding.GetGrid().GetWorldPosition(x, y).y));
-        }
+        }   
+    }
 
+    /// <summary>
+    /// If the waypoint isnt equal to the current position, move character
+    /// </summary>
+    private void Movement()
+    {
         if (m_currentWaypoint != character.position) character.position = Vector3.MoveTowards(character.position, m_currentWaypoint, moveSpeed * Time.deltaTime);
     }
 

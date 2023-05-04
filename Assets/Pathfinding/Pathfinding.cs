@@ -8,7 +8,6 @@ using UnityEngine.Tilemaps;
 /// Contains logic for finding the best path. Uses A* pathfinding.
 /// </summary>
 /// Notes:
-/// - Using Utilies from https://unitycodemonkey.com/utils.php
 /// - Based on Tutorial: https://youtu.be/waEsGu--9P8
 public class Pathfinding
 {
