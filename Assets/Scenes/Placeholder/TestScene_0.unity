@@ -2167,7 +2167,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 504200614}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2190,7 +2190,7 @@ MonoBehaviour:
   collisionLayer:
     serializedVersion: 2
     m_Bits: 8
-  baseMoveSpeed: 3
+  baseMoveSpeed: 8
   radius: 0.25
 --- !u!61 &504200617
 BoxCollider2D:
@@ -2785,9 +2785,7 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 8
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 256
+  test: {fileID: 1202817639}
 --- !u!1 &1672177876
 GameObject:
   m_ObjectHideFlags: 0

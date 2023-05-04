@@ -10,14 +10,15 @@ using UnityEngine;
 public class FieldOfView : MonoBehaviour
 {
     [SerializeField] private LayerMask obstacleMask;
-    [SerializeField] private LayerMask targetMask;
+    [SerializeField] private Testing test;
 
     private Mesh m_mesh;
     private Vector3 m_origin;
     private float m_fov;
     private float m_startingAngle;
-    private Transform m_target;
-    public Transform Target
+    private float m_viewDistance;
+    private Vector2 m_target;
+    public Vector2 Target
     {
         get => m_target;
     }
@@ -52,7 +53,7 @@ public class FieldOfView : MonoBehaviour
         int rayCount = 180;
         float angle = m_startingAngle;
         float angleIncrease = m_fov / rayCount;
-        float viewDistance = 50f;
+        m_viewDistance = 50f;
 
         // init components
         Vector3[] vertices = new Vector3[rayCount + 1 + 1];
@@ -65,19 +66,32 @@ public class FieldOfView : MonoBehaviour
         for (int i = 0; i <= rayCount; i++)
         {
             Vector3 vertex;
-            RaycastHit2D hitObstacle = Physics2D.Raycast(m_origin, GetVectorFromAngle(angle), viewDistance, obstacleMask);
+            RaycastHit2D hitObstacle = Physics2D.Raycast(m_origin, GetVectorFromAngle(angle), m_viewDistance, obstacleMask);
 
             if (hitObstacle.collider == null) // no hit
             {
-                vertex = m_origin + GetVectorFromAngle(angle) * viewDistance;
-                m_target = null; // if there is no target to detect
+                vertex = m_origin + GetVectorFromAngle(angle) * m_viewDistance;
             }
             else // hit object
             {
                 vertex = hitObstacle.point;
-                if (hitObstacle.transform.tag == "Player") // check if the obstacle is a player
+            }
+
+            // check for target
+            RaycastHit2D hitTarget = Physics2D.Raycast(m_origin, GetVectorFromAngle(angle), m_viewDistance);
+            if (hitTarget.collider != null) // if object is hit
+            {
+                if (hitTarget.transform.tag == "Player")
                 {
-                    m_target = hitObstacle.transform; // set target to player
+                    if (m_target != hitTarget.point)
+                    {
+                        m_target = hitTarget.point; // if player is hit, set target to player
+
+                        if (!test.CanPathFind && test.CheckIfStopped()) // if the tracker is stopped but the player can be found, reactivate tracker
+                        {
+                            test.CanPathFind = true;
+                        }
+                    } 
                 }
             }
 
